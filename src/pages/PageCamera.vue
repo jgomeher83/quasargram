@@ -41,12 +41,14 @@
       <div class="row justify-center q-ma-md">
         <q-input
           v-model="post.location"
+          :loading="locationLoading"
           class="col col-sm-6"
           label="Location"
           dense
         >
-          <template>
+          <template v-slot:append>
             <q-btn
+              v-if="!locationLoading"
               @click="getLocation"
               color="grey-10"
               round
@@ -81,8 +83,16 @@ export default {
       },
       imageCaptured: false,
       imageUpload: [],
-      hasCameraSupport: true
+      hasCameraSupport: true,
+      locationLoading: false
     };
+  },
+  computed: {
+    // locationSupported() {
+    //   if ("geolocation" in navigator) return;
+    //   true;
+    //   return false;
+    // }
   },
   methods: {
     initCamera() {
@@ -153,6 +163,7 @@ export default {
       return blob;
     },
     getLocation() {
+      this.locationLoading = true;
       navigator.geolocation.getCurrentPosition(
         position => {
           this.getCityAndCountry(position);
@@ -180,6 +191,7 @@ export default {
       if (result.data.country) {
         this.post.location += `, ${result.data.country}`;
       }
+      this.locationLoading = false;
     },
     locationError() {
       console.log("err0r");
@@ -187,6 +199,7 @@ export default {
         title: "Error",
         message: "Could not find your location"
       });
+      this.locationLoading = false;
     }
   },
   mounted() {

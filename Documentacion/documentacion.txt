@@ -1,0 +1,17 @@
+190621
+Heroku:
+    1. npm install -g heroku 
+    2. heroku plugins:install heroku-builds
+    3. heroku builds:create -a quasargram-backend-jpgh
+        to run use npm run deploy
+                                use the same name of the app in heroku 
+    4. install nodemon locally
+        npm install nodemon --save
+    5. Change this in index.js
+        app.listen(process.env.PORT || 3000)
+
+Firestore
+    1. npm install firebase-admin --save
+    2. Go to console and create a new web app
+        add the settings on index.js and go to console
+        for service account json
