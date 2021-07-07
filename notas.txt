@@ -1,0 +1,6 @@
+1. Para levantar el servidor 
+    cd backend
+    npm start
+2. Levantar app
+    cd ..
+    quasar dev
