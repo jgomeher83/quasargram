@@ -3,6 +3,8 @@
  * the ES6 features that are supported by your Node version. https://node.green/
  */
 
+const { Loading } = require("quasar")
+
 // Configuration for your app
 // https://v1.quasar.dev/quasar-cli/quasar-conf-js
 
@@ -102,7 +104,7 @@ module.exports = function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: ['Dialog']
+      plugins: ['Dialog', 'Notify', 'Loading']
     },
 
     // animations: 'all', // --- includes all animations

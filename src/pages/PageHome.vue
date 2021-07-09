@@ -35,7 +35,7 @@
             </q-card-section>
           </q-card>
         </template>
-        <template v-else-if="!loadingPost && !posts.length">
+        <template v-else-if="!loadingPosts && !posts.length">
           <h5 class="text-center text-grey">
             No posts yet
           </h5>
