@@ -229,12 +229,15 @@ export default {
           ]
         })
       })
+
+      this.$q.loading.hide()
       .catch(err =>{
         console.log(err);
         this.$q.dialog({
         title: "Error",
         message: "Sorry could not create post!"
-      });
+      })
+      this.$q.loading.hide()
 
       })
     }
