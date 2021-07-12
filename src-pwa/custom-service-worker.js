@@ -8,8 +8,28 @@
   DEPENDENCIES
  */
 import { precacheAndRoute } from 'workbox-precaching'
+import {registerRoute} from 'workbox-routing';
+import {StaleWhileRevalidate} from 'workbox-strategies';
+import {CacheFirst} from 'workbox-strategies';
+
 
 /*
-  CONFIG
- */
+CONFIG
+*/
 precacheAndRoute(self.__WB_MANIFEST);
+
+/*
+CACHING STRATEGIES
+*/
+registerRoute(
+  ({url}) => 
+    url.host.startsWith('fonts.go') ,
+  new CacheFirst()
+);
+
+registerRoute(
+  ({url}) => 
+    url.href.startsWith('http'),
+    new StaleWhileRevalidate()
+);
+
