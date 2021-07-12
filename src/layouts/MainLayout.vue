@@ -13,7 +13,6 @@
         />
         <q-separator class="large-screen-only" vertical spaced />
         <q-toolbar-title class="text-grand-hotel text-bold">
-          
           Quasargram
         </q-toolbar-title>
         <q-btn
@@ -28,19 +27,52 @@
       </q-toolbar>
     </q-header>
     <q-footer class="bg-white" bordered>
-    <q-banner inline-actions dense class="bg-primary text-white">
+      <transition
+        appear
+        enter-active-class="animated fadeIn"
+        leave-active-class="animated fadeOut"
+      >
+      </transition>
+      <div v-if="showAppInstallBanner" class="banner-container bg-primary">
+        <div class="constraing">
+          <q-banner inline-actions dense class="bg-primary text-white">
+            <template v-slot:avatar>
+              <q-avatar
+                color="white"
+                text-color="grey-10"
+                icon="eva-camera-outline"
+                font-size="22px"
+              />
+            </template>
 
-      <template v-slot:avatar>
-        <q-avatar color="white" text-color="grey-10" icon="eva-camera-outline" font-size="22px" />
-      </template>
+            <b>Install Quasargram?</b>
+            <template v-slot:action>
+              <q-btn
+                class="q-px-sm"
+                @click="installApp"
+                flat
+                dense
+                label="Yes"
+              />
+              <q-btn
+                class="q-px-sm"
+                @click="showAppInstallBanner = false"
+                flat
+                dense
+                label="Later"
+              />
+              <q-btn
+                class="q-px-sm"
+                @click="neverShowAppInstallBanner"
+                dense
+                flat
+                label="Never"
+              />
+            </template>
+          </q-banner>
+        </div>
+      </div>
 
-      <b>Install Quasargram?</b>
-      <template v-slot:action>
-        <q-btn flat dense label="Yes" />
-        <q-btn flat dense label="Later" />
-        <q-btn flat dense label="Never" />
-      </template>
-    </q-banner>
       <q-tabs
         class="text-grey-10 small-screen-only"
         active-color="primary"
@@ -57,10 +89,54 @@
 </template>
 
 <script>
+let deferredPrompt;
 export default {
   name: "MainLayout",
   data() {
-    return {};
+    return {
+      showAppInstallBanner: false,
+    };
+  },
+  methods: {
+    installApp() {
+      // Hide the app provided install promotion
+      this.showAppInstallBanner = false;
+      // Show the install prompt
+      deferredPrompt.prompt();
+      // Wait for the user to respond to the prompt
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === "accepted") {
+          console.log("User accepted the install prompt");
+          this.neverShowAppInstallBanner();
+        } else {
+          console.log("User dismissed the install prompt");
+        }
+      });
+    },
+    neverShowAppInstallBanner() {
+      this.showAppInstallBanner = false;
+      this.$q.localStorage.set("neverShowAppInstallBanner", true);
+    },
+  },
+  mounted() {
+    let neverShowAppInstallBanner = this.$q.localStorage.getItem(
+      "neverShowAppInstallBanner"
+    );
+    // Initialize deferredPrompt for use later to show browser install prompt.
+    
+    if (!neverShowAppInstallBanner) {
+      window.addEventListener("beforeinstallprompt", (e) => {
+        // Prevent the mini-infobar from appearing on mobile
+        e.preventDefault();
+        // Stash the event so it can be triggered later.
+        deferredPrompt = e;
+        //console.log(deferredPrompt);
+        // Update UI notify the user they can install the PWA
+        setTimeout(() => {
+          this.showAppInstallBanner = true;
+        }, 3000);
+      });
+    }
   },
 };
 </script>
