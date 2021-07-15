@@ -61,13 +61,14 @@
         </q-input>
       </div>
       <div class="row justify-center q-mt-lg">
-        <q-btn 
-        @click="addPost()"
-        :disable="!post.caption || !post.photo"
-        unelevated  
-        rounded 
-        color="primary" 
-        label="Post Image" />
+        <q-btn
+          @click="addPost()"
+          :disable="!post.caption || !post.photo"
+          unelevated
+          rounded
+          color="primary"
+          label="Post Image"
+        />
       </div>
     </div>
   </q-page>
@@ -86,12 +87,12 @@ export default {
         caption: "",
         location: "",
         photo: null,
-        date: Date.now()
+        date: Date.now(),
       },
       imageCaptured: false,
       imageUpload: [],
       hasCameraSupport: true,
-      locationLoading: false
+      locationLoading: false,
     };
   },
   computed: {
@@ -105,12 +106,12 @@ export default {
     initCamera() {
       navigator.mediaDevices
         .getUserMedia({
-          video: true
+          video: true,
         })
-        .then(stream => {
+        .then((stream) => {
           this.$refs.video.srcObject = stream;
         })
-        .catch(err => {
+        .catch((err) => {
           this.hasCameraSupport = false;
         });
     },
@@ -131,7 +132,7 @@ export default {
       let context = canvas.getContext("2d");
 
       var reader = new FileReader();
-      reader.onload = event => {
+      reader.onload = (event) => {
         var img = new Image();
         img.onload = () => {
           canvas.width = img.width;
@@ -144,7 +145,7 @@ export default {
       reader.readAsDataURL(file);
     },
     disableCamera() {
-      this.$refs.video.srcObject.getVideoTracks().forEach(track => {
+      this.$refs.video.srcObject.getVideoTracks().forEach((track) => {
         track.stop();
       });
     },
@@ -153,10 +154,7 @@ export default {
       // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
       var byteString = atob(dataURI.split(",")[1]);
       // separate out the mime component
-      var mimeString = dataURI
-        .split(",")[0]
-        .split(":")[1]
-        .split(";")[0];
+      var mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
       // write the bytes of the string to an ArrayBuffer
       var ab = new ArrayBuffer(byteString.length);
       // create a view into the buffer
@@ -172,10 +170,10 @@ export default {
     getLocation() {
       this.locationLoading = true;
       navigator.geolocation.getCurrentPosition(
-        position => {
+        (position) => {
           this.getCityAndCountry(position);
         },
-        err => {
+        (err) => {
           this.locationError();
         },
         { timeout: 7000 }
@@ -186,10 +184,10 @@ export default {
 
       this.$axios
         .get(apiUrl)
-        .then(result => {
+        .then((result) => {
           this.locationSuccess(result);
         })
-        .catch(err => {
+        .catch((err) => {
           this.locationError();
         });
     },
@@ -204,43 +202,45 @@ export default {
       console.log("err0r");
       this.$q.dialog({
         title: "Error",
-        message: "Could not find your location"
+        message: "Could not find your location",
       });
       this.locationLoading = false;
     },
     addPost() {
-      this.$q.loading.show()
-      console.log('posting');
+      this.$q.loading.show();
+
       let formData = new FormData();
-      formData.append('id', this.post.id)
-      formData.append('caption', this.post.caption)
-      formData.append('location', this.post.location)
-      formData.append('date', this.post.date)
-      formData.append('file', this.post.photo,this.post.id + '.png')
+      formData.append("id", this.post.id);
+      formData.append("caption", this.post.caption);
+      formData.append("location", this.post.location);
+      formData.append("date", this.post.date);
+      formData.append("file", this.post.photo, this.post.id + ".png");
 
-      this.$axios.post(`${process.env.API}/createPost`, formData).then(response => {
-        console.log(response);
-        this.$router.push('/')
-        this.$q.notify({
-          message: 'Post created!.',
-          color: 'primary',
-          actions: [
-            { label: 'Dismiss', color: 'white' }
-          ]
+      this.$axios
+        .post(`${process.env.API}/createPost`, formData)
+        .then((response) => {
+          console.log("response: ", response);
+          this.$router.push("/");
+          this.$q.notify({
+            message: "Post created!",
+            actions: [{ label: "Dismiss", color: "white" }],
+          });
+          this.$q.loading.hide();
         })
-      })
-
-      this.$q.loading.hide()
-      .catch(err =>{
-        console.log(err);
-        this.$q.dialog({
-        title: "Error",
-        message: "Sorry could not create post!"
-      })
-      this.$q.loading.hide()
-
-      })
-    }
+        .catch((err) => {
+          console.log("err: ", err);
+          if (!navigator.onLine && this.backgroundSyncSupported) {
+            this.$q.notify("Post created offline");
+            this.$router.push("/");
+          } else {
+            this.$q.dialog({
+              title: "Error",
+              message: "Sorry, could not create post!",
+            });
+          }
+          this.$q.loading.hide();
+        });
+    },
   },
   mounted() {
     this.initCamera();
@@ -249,7 +249,7 @@ export default {
     if (this.hasCameraSupport) {
       this.disableCamera();
     }
-  }
+  },
 };
 </script>
 
