@@ -7,12 +7,13 @@
   "private": true,
   "scripts": {
     "icons": "icongenie generate -i app-icon.png --skip-trim --theme-color 212121",
-    "deploy":"quasar build -m pwa && firebase deploy"
+    "deploy": "quasar build -m pwa && firebase deploy"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "idb": "^6.1.2",
     "md-gum-polyfill": "^1.0.0",
     "quasar": "^1.0.0"
   },

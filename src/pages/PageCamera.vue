@@ -96,11 +96,14 @@ export default {
     };
   },
   computed: {
-    // locationSupported() {
-    //   if ("geolocation" in navigator) return;
-    //   true;
-    //   return false;
-    // }
+    locationSupported() {
+      if ("geolocation" in navigator) return true;
+      return false;
+    },
+    backgroundSyncSupported() {
+      if ("serviceWorker" in navigator && "SyncManager" in window) return true;
+      return false;
+    },
   },
   methods: {
     initCamera() {

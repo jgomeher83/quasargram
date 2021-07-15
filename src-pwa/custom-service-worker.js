@@ -20,10 +20,9 @@ CONFIG
 */
 precacheAndRoute(self.__WB_MANIFEST);
 
-// if ('sync' in self.registration) {
-//   //background sync is natively supported.
+// disable workbox logs
+self.__WB_DISABLE_DEV_LOGS = false
 
-// }
 let backgroundSyncSupported = 'sync' in self.registration ? true : false
 console.log('backgroundSyncSupported', backgroundSyncSupported);
 /*
