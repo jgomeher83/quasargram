@@ -7,9 +7,16 @@
             v-for="post in posts"
             :key="post.id"
             class="card-post q-mb-md"
+            :class="{'bg-red-1' : post.offline}"
             flat
             bordered
           >
+          <q-badge 
+          v-if="post.offline"
+          color="red" 
+          class="badge-offline absolute-top-right">
+            Stored offline
+          </q-badge>
             <q-item>
               <q-item-section avatar>
                 <q-avatar>
@@ -109,7 +116,7 @@ export default {
       .then(db =>{
         db.getAll('requests')
         .then(failedRequests => {
-          failedRequests.forEach(failedRequest => {
+          failedRequests.forEach(failedRequest => {  
             if(failedRequest.queueName == 'createPostQueue'){
               let request = new Request(failedRequest.requestData.url, failedRequest.requestData)
               request.formData()
@@ -120,7 +127,6 @@ export default {
                 offlinePost.location = formData.get('location')
                 offlinePost.date = parseInt(formData.get('date'))
                 offlinePost.offline = true
-
                 let reader = new FileReader()
                 reader.readAsDataURL(formData.get('file'))
                 reader.onloadend = () => {
@@ -169,6 +175,8 @@ export default {
 
 <style lang="sass">
 .card-post
+  .badge-offline
+    border-top-left
   .q-img
     min-height: 200px
 </style>
