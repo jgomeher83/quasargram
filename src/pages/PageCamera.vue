@@ -83,7 +83,7 @@ export default {
   data() {
     return {
       post: {
-        id: uid(),
+        // id: uid(),
         caption: "",
         location: "",
         photo: null,
@@ -127,6 +127,7 @@ export default {
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
       this.imageCaptured = true;
       this.post.photo = this.dataURItoBlob(canvas.toDataURL());
+      console.log(this.post.photo)
       this.disableCamera();
     },
     captureImageFallback(file) {
@@ -213,13 +214,15 @@ export default {
       this.$q.loading.show();
 
       let formData = new FormData();
-      formData.append("id", this.post.id);
+      // formData.append("id", this.post.id);
       formData.append("caption", this.post.caption);
       formData.append("location", this.post.location);
       formData.append("date", this.post.date);
       formData.append("file", this.post.photo, this.post.id + ".png");
+      console.log(formData)
 
       this.$axios
+
         .post(`${process.env.API}/createPost`, formData)
         .then((response) => {
           console.log("response: ", response);
@@ -227,7 +230,7 @@ export default {
           this.$q.notify({
             message: "Post created!",
             actions: [{ label: "Dismiss", color: "white" }],
-          });
+          }); 
           this.$q.loading.hide();
         })
         .catch((err) => {

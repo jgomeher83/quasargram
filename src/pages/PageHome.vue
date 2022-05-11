@@ -5,7 +5,7 @@
         <template v-if="!loadingPosts && posts.length">
           <q-card
             v-for="post in posts"
-            :key="post.id"
+            :key="post._id"
             class="card-post q-mb-md"
             :class="{'bg-red-1' : post.offline}"
             flat
@@ -27,15 +27,15 @@
               <q-item-section>
                 <q-item-label class="text-bold">jpgh__</q-item-label>
                 <q-item-label caption>
-                  {{ post.location }}
+                  {{ post.Location }}
                 </q-item-label>
               </q-item-section>
             </q-item>
             <q-separator />
-            <q-img :src="post.imageUrl" />
+            <q-img :src="post.productThumbnail" />
 
             <q-card-section>
-              <div>{{ post.caption }}</div>
+              <div>{{ post.Details }}</div>
               <div class="text-caption text-grey">
                 {{ post.date | niceDate }}
               </div>
@@ -147,7 +147,9 @@ export default {
       this.$axios
         .get(`${process.env.API}/posts`)
         .then(response => {
-          this.posts = response.data;
+          console.log('res', response)
+          this.posts = response.data.posts;
+          console.log('posts', this.posts)
           this.loadingPosts = false;
           if(!navigator.onLine){
             this.getOfflinePosts()

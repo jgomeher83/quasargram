@@ -1,3 +1,8 @@
+# install quasar cli g 
+
+```bash
+ npm install -g @quasar/cli 
+```
 # Quasar App (quasargram2)
 
 A Quasar Framework app
@@ -7,11 +12,17 @@ A Quasar Framework app
 npm install
 ```
 
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
+### Start the app in development mode (hot-code reloading, error reporting, etc.) LEVANTA LA APP
 ```bash
 quasar dev
 ```
 
+### Backend LEVANTA EL BACKEND
+```bash
+cd backend
+npm install
+npm start
+```
 
 ### Build the app for production
 ```bash

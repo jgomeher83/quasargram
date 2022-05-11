@@ -8,7 +8,7 @@ const { Loading } = require("quasar")
 // Configuration for your app
 // https://v1.quasar.dev/quasar-cli/quasar-conf-js
 
-let API_LOCAL = 'http://localhost:8080',
+let API_LOCAL = 'http://localhost:9888/api/v1',
   API_PRODUCTION = 'http://quasargram-backend-jpgh.herokuapp.com'
 
 
